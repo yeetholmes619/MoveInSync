@@ -13,4 +13,10 @@ ETA, after which it would be available for allotment.
 ## L1 Diagram
 <img width="947" alt="Screen Shot 2023-12-07 at 3 53 43 PM" src="https://github.com/yeetholmes619/MoveInSync/assets/79030279/ce131151-da1f-478f-90cf-4db69c66d9f6">
 
+
+## Class Diagram
+
+<img width="652" alt="Screen Shot 2023-12-07 at 7 23 47 PM" src="https://github.com/yeetholmes619/MoveInSync/assets/79030279/0255faf4-515b-4adf-91e8-560404ab7d96">
+
+
 The implementation that I have submitted here unfortunately doesn't work due to some technical difficulty :)
