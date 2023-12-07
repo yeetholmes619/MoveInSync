@@ -7,10 +7,10 @@ closest points.
 And to solve the task of ride alloting, taxis who are about to finish their jounrey to customers, I wanted to use the expire function in redis and set it to value close to the
 ETA, after which it would be available for allotment.
 
-Basically we would have 3 tables, one being trip_start, trip_end, driver_loc (apart from the TripRequest table which would only make sense if we handle our work asynchronously)
+## L0 Diagram
+<img width="674" alt="Screen Shot 2023-12-07 at 3 53 49 PM" src="https://github.com/yeetholmes619/MoveInSync/assets/79030279/055f03c9-a8b7-4cf7-baf2-79248ba09682">
 
-trip_start would talk about the starting locations of the trips.
-trip_end would talk about the ending locations of the trips.
-and driver_loc would tel us the location of the active drivers.
+## L1 Diagram
+<img width="947" alt="Screen Shot 2023-12-07 at 3 53 43 PM" src="https://github.com/yeetholmes619/MoveInSync/assets/79030279/ce131151-da1f-478f-90cf-4db69c66d9f6">
 
-The implementation that I have submitted here unfortunately doesn't work due to some techincal difficulty :)
+The implementation that I have submitted here unfortunately doesn't work due to some technical difficulty :)
