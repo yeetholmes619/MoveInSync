@@ -77,7 +77,7 @@ class Jedis {
 }
 
 class Redis {
-    protected Jedis jedis;
+    protected static Jedis jedis;
     protected String key;
     private String host;
     private int port;
@@ -241,7 +241,7 @@ public class App {
         } catch (Exception e) {
             // Handle exceptions appropriately
             System.err.println("An error occurred: " + e.getMessage());
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 }
