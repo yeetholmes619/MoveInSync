@@ -18,18 +18,14 @@ class Jedis {
         row.add(latitude);
         row.add(member);
 
-        if (!data.containsKey(key)) {
-            data.put(key, new ArrayList<>());
-        }
-
-        data.get(key).add(row);
+        data.computeIfAbsent(key, k -> new ArrayList<>()).add(row);
     }
 
     public List<List<Object>> geopos(String key, String member) {
         List<List<Object>> result = new ArrayList<>();
         if (data.containsKey(key)) {
             for (List<Object> row : data.get(key)) {
-                if (row.get(2).equals(member)) {
+                if (row != null && row.size() >= 3 && row.get(2) != null && row.get(2).equals(member)) {
                     result.add(row);
                 }
             }
@@ -42,17 +38,13 @@ class Jedis {
         row.add(field);
         row.add(value);
 
-        if (!data.containsKey(key)) {
-            data.put(key, new ArrayList<>());
-        }
-
-        data.get(key).add(row);
+        data.computeIfAbsent(key, k -> new ArrayList<>()).add(row);
     }
 
     public String hget(String key, String field) {
         if (data.containsKey(key)) {
             for (List<Object> row : data.get(key)) {
-                if (row.get(0).equals(field)) {
+                if (row != null && row.size() >= 2 && row.get(0) != null && row.get(0).equals(field)) {
                     return (String) row.get(1);
                 }
             }
@@ -62,13 +54,7 @@ class Jedis {
 
     public void zrem(String key, String member) {
         if (data.containsKey(key)) {
-            Iterator<List<Object>> iterator = data.get(key).iterator();
-            while (iterator.hasNext()) {
-                List<Object> row = iterator.next();
-                if (row.get(2).equals(member)) {
-                    iterator.remove();
-                }
-            }
+            data.get(key).removeIf(row -> row != null && row.size() >= 3 && row.get(2) != null && row.get(2).equals(member));
         }
     }
 
@@ -76,11 +62,13 @@ class Jedis {
         List<List<Object>> result = new ArrayList<>();
         if (data.containsKey(key)) {
             for (List<Object> row : data.get(key)) {
-                double lon = (double) row.get(0);
-                double lat = (double) row.get(1);
-                double distance = Math.sqrt(Math.pow(lon - longitude, 2) + Math.pow(lat - latitude, 2));
-                if (distance <= radius) {
-                    result.add(row);
+                if (row != null && row.size() >= 2 && row.get(0) instanceof Double && row.get(1) instanceof Double) {
+                    double lon = (double) row.get(0);
+                    double lat = (double) row.get(1);
+                    double distance = Math.sqrt(Math.pow(lon - longitude, 2) + Math.pow(lat - latitude, 2));
+                    if (distance <= radius) {
+                        result.add(row);
+                    }
                 }
             }
         }
@@ -234,7 +222,6 @@ class Driver extends Account {
         driverLoc.deleteID(this.getId());
     }
 }
-
 public class App {
     public static void main(String[] args) {
         Customer c1 = new Customer("customer1", "customer1@gmail.com", "123456789", "1");
@@ -243,13 +230,18 @@ public class App {
         Driver d2 = new Driver("driver2", "driver2@gmail.com", "123456789", "4");
         Driver d3 = new Driver("driver3", "driver3@gmail.com", "123456789", "5");
 
-        d1.updateLocation(26.555804, 73.005372);
-        d2.updateLocation(26.517945, 73.139630);
-        c1.bookRequest("bookid1", 26.555804, 73.005372, 26.542190, 72.934498);
-        d3.updateLocation(26.509510, 73.195821);
-        c2.bookRequest("bookid2", 26.555804, 73.005372, 26.542190, 72.934498);
-        c1.endTrip("bookid1");
-        c2.endTrip("bookid2");
+        try {
+            d1.updateLocation(26.555804, 73.005372);
+            d2.updateLocation(26.517945, 73.139630);
+            c1.bookRequest("bookid1", 26.555804, 73.005372, 26.542190, 72.934498);
+            d3.updateLocation(26.509510, 73.195821);
+            c2.bookRequest("bookid2", 26.555804, 73.005372, 26.542190, 72.934498);
+            c1.endTrip("bookid1");
+            c2.endTrip("bookid2");
+        } catch (Exception e) {
+            // Handle exceptions appropriately
+            System.err.println("An error occurred: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }
-
